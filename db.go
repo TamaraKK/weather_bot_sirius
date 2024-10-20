@@ -3,14 +3,27 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
 func initDatabase() {
-	connStr := "user=postgres password=7kGZSzSCcHT6zzA dbname=weather_go sslmode=disable"
+
+	errr := godotenv.Load()
+	if errr != nil {
+		log.Fatal("Ошибка загрузки .env файла")
+	}
+
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	connStr := "user=" + user + " password=" + password + " dbname=" + dbname + " sslmode=disable"
+	// connStr := "user=postgres password=7kGZSzSCcHT6zzA dbname=weather_go sslmode=disable"
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
