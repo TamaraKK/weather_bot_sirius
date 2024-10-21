@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
 	"os"
 
 	"github.com/joho/godotenv"
@@ -18,14 +20,19 @@ func initDatabase() {
 		log.Fatal("Ошибка загрузки .env файла")
 	}
 
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
+	// user := os.Getenv("DB_USER")
+	// password := os.Getenv("DB_PASSWORD")
+	// dbname := os.Getenv("DB_NAME")
 
-	connStr := "user=" + user + " password=" + password + " dbname=" + dbname + " sslmode=disable"
+	// connStr := "user=" + user + " password=" + password + " dbname=" + dbname + " sslmode=disable"
 	// connStr := "user=postgres password=7kGZSzSCcHT6zzA dbname=weather_go sslmode=disable"
 	var err error
-	db, err = sql.Open("postgres", connStr)
+	// db, err = sql.Open("postgres", "db:5432")
+	db, err = sql.Open("postgres", fmt.Sprintf("host=db port=5432 user=%s password=%s dbname=%s sslmode=disable",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+	))
 	if err != nil {
 		log.Fatal("Error connecting to database:", err)
 	}
